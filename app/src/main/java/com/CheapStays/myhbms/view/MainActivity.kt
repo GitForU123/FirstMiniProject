@@ -1,7 +1,9 @@
-package com.CheapStays.myhbms
+package com.CheapStays.myhbms.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.CheapStays.myhbms.R
+import com.CheapStays.myhbms.RegisterFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

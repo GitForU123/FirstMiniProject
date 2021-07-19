@@ -1,12 +1,22 @@
 package com.CheapStays.myhbms
 
+import android.content.Intent
 import android.os.Bundle
+import android.security.keystore.UserNotAuthenticatedException
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.CheapStays.myhbms.presenter.AdminPresenter
+import com.CheapStays.myhbms.presenter.CredentialPresenter
+import com.CheapStays.myhbms.presenter.IPresenter
+import com.CheapStays.myhbms.presenter.LogInpresenter
+import com.CheapStays.myhbms.view.AdminActivity
+import com.CheapStays.myhbms.view.ILogInView
+import com.CheapStays.myhbms.view.UserActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,15 +30,26 @@ private const val ARG_PARAM2 = "pass"
  */
 class LogInFragment : Fragment() {
     // TODO: Rename and change types of parameters
+
+    var isAdmin = false
     private var email: String? = null
     private var password: String? = null
     lateinit var emailText: EditText
+    lateinit var passText : EditText
+    lateinit var logInButton : Button
+
+    // reference to interface presenter
+    lateinit var presenter : LogInpresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             email = it.getString(ARG_PARAM1)
             password = it.getString(ARG_PARAM2)
+
+            // init
+            presenter = AdminPresenter(this)
+
         }
     }
 
@@ -44,10 +65,32 @@ class LogInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         emailText = view.findViewById(R.id.emailE)
+        passText = view.findViewById(R.id.passE)
+        logInButton = view.findViewById(R.id.logInB)
+
         emailText.setText(email)
 
         Toast.makeText(context,"received email: $email" +
                 "password : $password",Toast.LENGTH_SHORT).show()
+        logInButton.setOnClickListener {
+            val logemail = emailText.text.toString()
+            val logpass = passText.text.toString()
+            isAdmin = presenter.checkAdmin(logemail,logpass)  // Using method of LogInPresenter
+            passText.setText("")
+            if(isAdmin){
+                // launch the admin page
+                val intent = Intent(context,AdminActivity::class.java)
+                startActivity(intent)
+                // close the fragment
+
+            }else{
+                // launch the user page
+                val intent = Intent(context,UserActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+
     }
 
     companion object {
@@ -69,4 +112,6 @@ class LogInFragment : Fragment() {
                 }
             }
     }
+
+
 }

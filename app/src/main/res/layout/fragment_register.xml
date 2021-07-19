@@ -16,10 +16,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Rpass" />
+        app:layout_constraintTop_toBottomOf="@+id/passR" />
 
     <EditText
-        android:id="@+id/Rpass"
+        android:id="@+id/passR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -29,10 +29,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Remail" />
+        app:layout_constraintTop_toBottomOf="@+id/emailR" />
 
     <EditText
-        android:id="@+id/Remail"
+        android:id="@+id/emailR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"

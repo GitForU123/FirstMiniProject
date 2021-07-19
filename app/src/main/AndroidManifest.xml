@@ -9,16 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyHBMS">
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".SplashActivity"
+        <activity android:name=".view.UserActivity">
+
+        </activity>
+        <activity android:name=".view.AdminActivity" >
+
+        </activity>
+        <activity android:name=".view.MainActivity" />
+        <activity
+            android:name=".SplashActivity"
             android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
 
+        </activity>
     </application>
 
 </manifest>
