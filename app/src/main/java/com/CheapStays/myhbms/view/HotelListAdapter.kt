@@ -40,5 +40,6 @@ class HotelListAdapter(val hotelList : List<Hotel>?)  : RecyclerView.Adapter<Hot
         holder.cuisineType.text = cuisineType
     }
 
-    override fun getItemCount() = hotelList!!.size
+    override fun getItemCount() = hotelList?.size ?:  0
+
 }

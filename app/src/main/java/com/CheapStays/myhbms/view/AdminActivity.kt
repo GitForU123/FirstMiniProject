@@ -1,13 +1,17 @@
 package com.CheapStays.myhbms.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.CheapStays.myhbms.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -19,32 +23,72 @@ import com.google.firebase.ktx.Firebase
 class AdminActivity : AppCompatActivity() {
     lateinit var db: FirebaseDatabase
     lateinit var rView : RecyclerView
+    lateinit var floatButton : FloatingActionButton
+    var counter : Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin)
 
         rView = findViewById(R.id.rView)
 
+        floatButton = findViewById(R.id.fabB)
+
         rView.layoutManager = LinearLayoutManager(this)
 
         db = Firebase.database
 
-        addHotel()
+        getHotelDetails()
+
+//        addHotel()
+
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menu?.add("get HotelsDetails")
-        return super.onCreateOptionsMenu(menu)
+    override fun onResume() {
+        super.onResume()
+        getHotelDetails()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.title){
-            "get HotelsDetails" ->{
-                getHotelDetails()
+    fun fabClicked(view: View) {
+        val intent = Intent(this,HotelDetailsActivity::class.java)
+        startActivityForResult(intent,1)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if(requestCode == 1){
+            when(resultCode){
+                RESULT_OK ->{
+                    data?.let {
+                        val hotelName = it.getStringExtra("name")?: ""
+                        val id = it.getIntExtra("id",11)
+                        val city =it.getStringExtra("city")  ?: ""
+                        val lat = it.getDoubleExtra("lat",0.0)
+                        val long = it.getDoubleExtra("lon",0.0)
+
+                        val cuisintype = it.getStringArrayListExtra("cuisinetype") as List<String>
+                        val itemno = it.getIntExtra("itemid",0)
+                        val itemdescription = it.getStringExtra("itemdescription") ?: ""
+                        val itemprice = it.getIntExtra("itemprice",500)
+
+                        addHotel(hotelName,id,city,lat,long,cuisintype,itemno,itemdescription,itemprice)
+
+                        Toast.makeText(this,"Received $hotelName & $city & $lat & $long" +
+                                "& $cuisintype",
+                            Toast.LENGTH_SHORT).show()
+                    }
+
+
+
+                }
+                RESULT_CANCELED ->{
+                    Toast.makeText(this,"Nothing Received",Toast.LENGTH_SHORT).show()
+                }
             }
         }
-        return super.onOptionsItemSelected(item)
+        super.onActivityResult(requestCode, resultCode, data)
     }
+
+
 
     private fun getHotelDetails() {
         val ref = db.getReference("HotelDB").child("HotelList")   // to go to HotelList node in db
@@ -104,64 +148,49 @@ class AdminActivity : AppCompatActivity() {
         })
     }
 
-    private fun addHotel() {
+    private fun addHotel(hotelName : String ,id : Int, city : String, lat : Double,
+                         long : Double, cuisintype : List<String>,
+                         itemno : Int , itemdescription : String, itemprice : Int)
+      {
 
-//        val current = Weather(123466,35.6,77.0,999) // property of Weather
-//        val current2 = Weather(222222,43.6,56.9,885)
 
-
+//        val menuitem = mutableListOf<Item>()
+//        menuitem.add(0,Item("Puri Bhaji",150))
 //
-//        val weatherlist = mutableListOf<Weather>()
-//        weatherlist.add(0,Weather(556677,65.8,78.9,899)) // list of Weather item
-//
-//        val ref = db.getReference("CurrentDb")
-//        ref.child("Current").child(current.dt.toString()).setValue(current)
-//        ref.child("Current").child(current2.dt.toString()).setValue(current2)  // adding to same node
-//
-//        ref.child("hourly").setValue(weatherlist)
-//
-//        val timezone1 = "Asia/Kolkata"
-//        ref.child("timezone").setValue(timezone1)
-//
-//        val currentWeather = Current(weatherlist,"Asia/Delhi",current)
-//
-//
-//        ref.child("CurrentWeather").setValue(currentWeather)
-
-        val menuitem = mutableListOf<Item>()
-        menuitem.add(0,Item("Puri Bhaji",150))
-
-        val menuitem2 = mutableListOf<Item>()
-        menuitem2.addAll(0, mutableListOf(Item("Pasta",450),Item("Noodles",350)))
+//        val menuitem2 = mutableListOf<Item>()
+//        menuitem2.addAll(0, mutableListOf(Item("Pasta",450),Item("Noodles",350)))
 
         val menuitem3 = mutableListOf<Item>()
-        menuitem3.add(0,Item("Nachos",245))
-        val  cuisineList = mutableListOf<Cuisine>()
-        cuisineList.add(0, Cuisine("Indian",menuitem))
-        cuisineList.add(1, Cuisine("Mexican",menuitem3))
+//        menuitem3.add(0,Item("Nachos",245))
+
+          menuitem3.add(Item(itemdescription,itemprice))
+
+//        val  cuisineList = mutableListOf<Cuisine>()
+//        cuisineList.add(0, Cuisine("Indian",menuitem))
+//        cuisineList.add(1, Cuisine("Mexican",menuitem3))
 
         val cuisineList2 = mutableListOf<Cuisine>()
-        cuisineList2.add(0, Cuisine("Italian",menuitem2))
+//        cuisineList2.add(0, Cuisine("Italian",menuitem2))
+          for( type in cuisintype){
+              cuisineList2.add(Cuisine(type,menuitem3))
+          }
 
         val hotelList = mutableListOf<Hotel>()
-        hotelList.add(0, Hotel(0,"Taj Hotel","Mumbai",80.5,90.6,cuisineList))
-        hotelList.add(1, Hotel(1,"Sahara Hotel","Lucknow",80.5,45.7,cuisineList2))
+//        hotelList.add(0, Hotel(0,"Taj Hotel","Mumbai",80.5,90.6,cuisineList))
+//        hotelList.add(1, Hotel(1,"Sahara Hotel","Lucknow",80.5,45.7,cuisineList2))
+        hotelList.add(Hotel(id,hotelName,city,lat,long,cuisineList2))
 
         val listOfHotel = HotelList(hotelList)
 
         val ref = db.getReference("HotelDB")
-        ref.child("HotelList").setValue(listOfHotel)
+        ref.child("HotelList").push().setValue(listOfHotel)
 
-
+//      counter++
 
     }
+
+
 }
-
-//data class Weather(val dt : Long ,val temp : Double, val wind_speed : Double, val pressure : Int)
-//
-//data class Current(val hourly : List<Weather>, val timezone : String, val current : Weather)
-
-
 
 class Item (){
     var description : String = ""

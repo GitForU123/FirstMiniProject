@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ConstraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".view.HotelDetailsActivity">
+
+
+        <Button
+            android:id="@+id/saveB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:onClick="buttonClick"
+            android:text="Save"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itempriceE" />
+
+        <Button
+            android:id="@+id/cancelB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:onClick="buttonClick"
+            android:text="Cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/saveB"
+            app:layout_constraintTop_toTopOf="@+id/saveB" />
+
+        <CheckBox
+            android:id="@+id/indianC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:onClick="cbClicked"
+            android:text="Indian"
+            app:layout_constraintStart_toStartOf="@+id/cuisinetypeListE"
+            app:layout_constraintTop_toBottomOf="@+id/cuisinetypeListE" />
+
+        <CheckBox
+            android:id="@+id/italianC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:onClick="cbClicked"
+            android:text="Italian"
+            app:layout_constraintStart_toEndOf="@+id/indianC"
+            app:layout_constraintTop_toTopOf="@+id/indianC" />
+
+        <CheckBox
+            android:id="@+id/mexicanC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:onClick="cbClicked"
+            android:text="Mexican"
+            app:layout_constraintStart_toEndOf="@+id/italianC"
+            app:layout_constraintTop_toTopOf="@+id/italianC" />
+
+        <EditText
+            android:id="@+id/hotelnameE"
+            android:layout_width="148dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Hotel Name"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <EditText
+            android:id="@+id/hotelidE"
+            android:layout_width="88dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="10dp"
+            android:ems="10"
+            android:hint="ID No."
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/hotelnameE"
+            app:layout_constraintTop_toTopOf="@+id/hotelnameE" />
+
+        <EditText
+            android:id="@+id/citynameE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="City"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="@+id/hotelnameE"
+            app:layout_constraintTop_toBottomOf="@+id/hotelnameE" />
+
+        <EditText
+            android:id="@+id/latE"
+            android:layout_width="114dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Latitude"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="@+id/citynameE"
+            app:layout_constraintTop_toBottomOf="@+id/citynameE" />
+
+        <EditText
+            android:id="@+id/lonE"
+            android:layout_width="97dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="20dp"
+            android:ems="10"
+            android:hint="Longitude"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toBottomOf="@+id/latE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/latE" />
+
+        <EditText
+            android:id="@+id/cuisinetypeListE"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Cuisine Type List"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="@+id/latE"
+            app:layout_constraintTop_toBottomOf="@+id/latE" />
+
+        <EditText
+            android:id="@+id/cuisineitemNo"
+            android:layout_width="167dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Cusine Item No"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="@+id/indianC"
+            app:layout_constraintTop_toBottomOf="@+id/indianC" />
+
+        <EditText
+            android:id="@+id/itemdescriptionE"
+            android:layout_width="172dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Item Description"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="@+id/cuisineitemNo"
+            app:layout_constraintTop_toBottomOf="@+id/cuisineitemNo" />
+
+        <EditText
+            android:id="@+id/itempriceE"
+            android:layout_width="168dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Item Price"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="@+id/itemdescriptionE"
+            app:layout_constraintTop_toBottomOf="@+id/itemdescriptionE" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Add Hotel Details"
+            android:textColor="#9C27B0"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
