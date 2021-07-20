@@ -28,9 +28,9 @@ class HotelDetailsActivity : AppCompatActivity() {
             val longitude = lonE.text.toString().toDouble()
 
             val cuisinetype = ArrayList(typeList)
-            val itemid = cuisineitemNo.text.toString().toInt()
-            val itemdescription = itemdescriptionE.text.toString()
-            val itemprice = itempriceE.text.toString().toInt()
+//            val itemid = cuisineitemNo.text.toString().toInt()
+//            val itemdescription = itemdescriptionE.text.toString()
+//            val itemprice = itempriceE.text.toString().toInt()
 
             val intent = Intent(this,AdminActivity::class.java)
             intent.putExtra("name",hotelName)
@@ -40,9 +40,9 @@ class HotelDetailsActivity : AppCompatActivity() {
             intent.putExtra("lon",longitude)
 
             intent.putStringArrayListExtra("cuisinetype",cuisinetype)
-            intent.putExtra("itemid",itemid)
-            intent.putExtra("itemdescription",itemdescription)
-            intent.putExtra("itemprice",itemprice)
+//            intent.putExtra("itemid",itemid)
+//            intent.putExtra("itemdescription",itemdescription)
+//            intent.putExtra("itemprice",itemprice)
 
             setResult(RESULT_OK,intent)
                 finish()

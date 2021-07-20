@@ -1,15 +1,20 @@
 package com.CheapStays.myhbms.view
 
+import android.content.Intent
+import android.util.Log
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.CheapStays.myhbms.R
 import java.lang.StringBuilder
 
-class HotelListAdapter(val hotelList : List<Hotel>?)  : RecyclerView.Adapter<HotelListAdapter.HotelHolder>(){
+class HotelListAdapter(val hotelList : ArrayList<Hotel>)  : RecyclerView.Adapter<HotelListAdapter.HotelHolder>(){
 
     class HotelHolder(view : View) : RecyclerView.ViewHolder(view){
         // this class holds all the view
@@ -17,6 +22,8 @@ class HotelListAdapter(val hotelList : List<Hotel>?)  : RecyclerView.Adapter<Hot
         val hotelName = view.findViewById<TextView>(R.id.nameT)
         val city = view.findViewById<TextView>(R.id.cityT)
         val cuisineType = view.findViewById<TextView>(R.id.cuisinetypeT)
+
+
 
     }
     override fun onCreateViewHolder(
@@ -29,17 +36,30 @@ class HotelListAdapter(val hotelList : List<Hotel>?)  : RecyclerView.Adapter<Hot
     }
 
     override fun onBindViewHolder(holder: HotelListAdapter.HotelHolder, position: Int) {
-       val hotel = hotelList?.get(position)
-        holder.hotelName.text = hotel?.name
-        holder.city.text = hotel?.city
-        var cuisineType = StringBuilder()
-        val cuisineList = hotel?.cuisine
-        cuisineList?.forEach {
-            cuisineType.append(it.type).append(" ")
+
+        holder.itemView.setOnCreateContextMenuListener { menu, v, menuInfo ->
+            menu?.add("Add items")?.setOnMenuItemClickListener {
+               Log.d("Context","Clicked at postion $position & $it")
+                // launch an activity to add items
+
+                val intent = Intent(holder.itemView.context,ItemsActivity::class.java)
+                intent.putExtra("hotelid",hotelList[position].id)
+                holder.itemView.context.startActivity(intent)
+                true
+            }
         }
-        holder.cuisineType.text = cuisineType
+       val hotel = hotelList[position]
+        holder.hotelName.text = hotel.name
+        holder.city.text = hotel.city
+
+//        var cuisineType = StringBuilder()
+//        val cuisineList = hotel?.cuisine
+//        cuisineList?.forEach {
+//            cuisineType.append(it.type).append(" ")
+//        }
+//        holder.cuisineType.text = cuisineType
     }
 
-    override fun getItemCount() = hotelList?.size ?:  0
+    override fun getItemCount() = hotelList.size
 
 }

@@ -22,12 +22,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:onClick="buttonClick"
             android:text="Save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itempriceE" />
+            app:layout_constraintTop_toBottomOf="@+id/indianC" />
 
         <Button
             android:id="@+id/cancelB"
@@ -138,39 +138,6 @@
             android:inputType="textPersonName"
             app:layout_constraintStart_toStartOf="@+id/latE"
             app:layout_constraintTop_toBottomOf="@+id/latE" />
-
-        <EditText
-            android:id="@+id/cuisineitemNo"
-            android:layout_width="167dp"
-            android:layout_height="46dp"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:hint="Cusine Item No"
-            android:inputType="textPersonName"
-            app:layout_constraintStart_toStartOf="@+id/indianC"
-            app:layout_constraintTop_toBottomOf="@+id/indianC" />
-
-        <EditText
-            android:id="@+id/itemdescriptionE"
-            android:layout_width="172dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:hint="Item Description"
-            android:inputType="textPersonName"
-            app:layout_constraintStart_toStartOf="@+id/cuisineitemNo"
-            app:layout_constraintTop_toBottomOf="@+id/cuisineitemNo" />
-
-        <EditText
-            android:id="@+id/itempriceE"
-            android:layout_width="168dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:hint="Item Price"
-            android:inputType="textPersonName"
-            app:layout_constraintStart_toStartOf="@+id/itemdescriptionE"
-            app:layout_constraintTop_toBottomOf="@+id/itemdescriptionE" />
 
         <TextView
             android:id="@+id/textView"
