@@ -42,6 +42,8 @@ class AdminActivity : AppCompatActivity() {
 
         getHotelDetails()
 
+        getCuisineList(1)
+
 //        addHotel()
         registerForContextMenu(rView)
 
@@ -69,15 +71,15 @@ class AdminActivity : AppCompatActivity() {
                         val lat = it.getDoubleExtra("lat",0.0)
                         val long = it.getDoubleExtra("lon",0.0)
 
-                        val cuisintype = it.getStringArrayListExtra("cuisinetype") as List<String>
+                        val cuisinetype = it.getStringArrayListExtra("cuisinetype") as List<String>
 //                        val itemno = it.getIntExtra("itemid",0)
 //                        val itemdescription = it.getStringExtra("itemdescription") ?: ""
 //                        val itemprice = it.getIntExtra("itemprice",500)
 
-                        addHotel(hotelName,id,city,lat,long)
+                        addHotel(hotelName,id,city,lat,long,cuisinetype)
 
                         Toast.makeText(this,"Received $hotelName & $city & $lat & $long" +
-                                "& $cuisintype",
+                                "& $cuisinetype",
                             Toast.LENGTH_SHORT).show()
                     }
 
@@ -102,13 +104,19 @@ class AdminActivity : AppCompatActivity() {
                 Log.d("AdminActivity", "${snapshot.value}")
                 hotelList.clear()
                 for (hotelSnapshot in snapshot.children) {
+                    Log.d("AdminActivity", "$hotelSnapshot")
                     val hotel =
                         hotelSnapshot.getValue(Hotel::class.java)   // value in it will be details of hotel
 
                     if (hotel != null) {
+                        val lat = hotel.lat
+                        val long = hotel.long
+
+
+
                         Log.d(
                             "AdminActivity", "hotel id : ${hotel.id} &" +
-                                    "hotel name : ${hotel.name}  & ${hotel.city}"
+                                    "hotel name : ${hotel.name}  & ${hotel.city}  "
                         )
                     }
 
@@ -157,33 +165,48 @@ class AdminActivity : AppCompatActivity() {
         })
     }
 
+
+    private fun getCuisineList(hotelid : Int){
+
+        val ref = db.getReference("HotelDB").child("Hotel").child("$hotelid").child("cuisinetype")
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d("Cuisine", "${snapshot.value}")
+                for (list in snapshot.children){
+                    Log.d("Cuisine", "$list")   // list of cuisinetype
+                    for(cuisineList in list.children)
+                    {
+                        Log.d("Cuisine", "$cuisineList")   // list of items
+                        val cuisineValue = cuisineList.getValue(CuisineList::class.java)
+                        Log.d("Cuisine", "${cuisineValue?.cuisinetype}  & ${cuisineValue?.itemNo} &" +
+                                "${cuisineValue?.description} & ${cuisineValue?.price}")
+
+                    }
+
+                }
+
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+
+        })
+    }
+
     private fun addHotel(hotelName : String ,id : Int, city : String, lat : Double,
-                         long : Double)
+                         long : Double, cuisinetype : List<String>)
       {
+        val cuisineList = mutableListOf<String>()
+          for( type in cuisinetype){
+              cuisineList.add(type)
+          }
 
+       val hotel = Hotel(id,hotelName,city,lat,long,cuisineList)
 
-
-
-//        val menuitem3 = mutableListOf<Item>()
-////        menuitem3.add(0,Item("Nachos",245))
-//
-//          menuitem3.add(Item(itemdescription,itemprice))
-//
-////        val  cuisineList = mutableListOf<Cuisine>()
-////        cuisineList.add(0, Cuisine("Indian",menuitem))
-////        cuisineList.add(1, Cuisine("Mexican",menuitem3))
-//
-//        val cuisineList2 = mutableListOf<Cuisine>()
-////        cuisineList2.add(0, Cuisine("Italian",menuitem2))
-//          for( type in cuisintype){
-//              cuisineList2.add(Cuisine(type,menuitem3))
-//          }
-
-       val hotel = Hotel(id,hotelName,city,lat,long)
-
-
-
-        val ref = db.getReference("HotelDB")
+          val ref = db.getReference("HotelDB")
         ref.child("Hotel").child(id.toString()).setValue(hotel)
 
 
@@ -195,37 +218,37 @@ class AdminActivity : AppCompatActivity() {
 
 
 
-//class Cuisine( ){
-//    var type : String = ""
-////    var items :  List<Item>? = null
-//    constructor(type : String) : this(){
-////       this.items = items
-//       this.type = type
-//    }
-//
-//}
+
 class Hotel(){
     var id : Int = 0
     var name : String = ""
     var city : String = ""
     var lat : Double = 0.0
     var long : Double =0.0
-//    var cuisine : List<Cuisine>? = null
+    var cuisine : List<String>? = null
     constructor( id : Int , name : String, city : String, lat : Double , long : Double,
+                 cuisine : List<String>
                 ) : this(){
                     this.id = id
                     this.name =name
                     this.city = city
                     this.lat = lat
                     this.long = long
-//                    this.cuisine = cuisine
+                   this.cuisine = cuisine
                 }
-}
+      }
 
-//class HotelList(){
-//    var hotel : List<Hotel>? = null
-//    constructor(hotel : List<Hotel>) : this(){
-//    this.hotel = hotel
-//
-//    }
-//}
+
+
+class CuisineList (){
+    var itemNo : Int = 0
+    var description : String = ""
+    var price : Int = 0
+    var cuisinetype : String = ""
+    constructor(itemNo : Int ,description : String,price : Int, cuisinetype : String) : this(){
+        this.description = description
+        this.price = price
+        this.cuisinetype =  cuisinetype
+        this.itemNo = itemNo
+    }
+}

@@ -52,12 +52,12 @@ class HotelListAdapter(val hotelList : ArrayList<Hotel>)  : RecyclerView.Adapter
         holder.hotelName.text = hotel.name
         holder.city.text = hotel.city
 
-//        var cuisineType = StringBuilder()
-//        val cuisineList = hotel?.cuisine
-//        cuisineList?.forEach {
-//            cuisineType.append(it.type).append(" ")
-//        }
-//        holder.cuisineType.text = cuisineType
+        var cuisineType = StringBuilder()
+        val cuisineList = hotel?.cuisine
+        cuisineList?.forEach {
+            cuisineType.append(it).append(" ")
+        }
+        holder.cuisineType.text = cuisineType
     }
 
     override fun getItemCount() = hotelList.size

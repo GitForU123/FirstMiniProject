@@ -36,7 +36,7 @@ class ItemsActivity : AppCompatActivity() {
         val item = Item(itemNo,itemdescription,itemprice,cuisinetype)
 
         val ref = db.getReference("HotelDB").child("Hotel")
-        ref.child("$hotelid").child(cuisinetype).child("$itemNo").setValue(item)
+        ref.child("$hotelid").child("cuisinetype").child(cuisinetype).child("$itemNo").setValue(item)
 
     }
 
