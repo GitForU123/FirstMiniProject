@@ -17,6 +17,7 @@ import com.CheapStays.myhbms.presenter.LogInpresenter
 import com.CheapStays.myhbms.view.AdminActivity
 import com.CheapStays.myhbms.view.ILogInView
 import com.CheapStays.myhbms.view.UserActivity
+import com.CheapStays.myhbms.view.UserHomeActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -85,7 +86,7 @@ class LogInFragment : Fragment() {
 
             }else{
                 // launch the user page
-                val intent = Intent(context,UserActivity::class.java)
+                val intent = Intent(context, UserHomeActivity::class.java)
                 startActivity(intent)
             }
         }

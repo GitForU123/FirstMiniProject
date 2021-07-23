@@ -102,7 +102,7 @@ class AdminActivity : AppCompatActivity() {
 
 
 
-class Hotel(){
+ class Hotel(){
     var id : Int = 0
     var name : String = ""
     var city : String = ""

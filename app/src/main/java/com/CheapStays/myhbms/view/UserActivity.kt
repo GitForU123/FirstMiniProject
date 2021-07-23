@@ -17,4 +17,9 @@ class UserActivity : AppCompatActivity() {
         val intent = Intent(this, MapsActivity::class.java)
         startActivity(intent)
     }
+
+    fun navigationClick(view: View) {
+        val intent = Intent(this,UserHomeActivity::class.java)
+        startActivity(intent)
+    }
 }

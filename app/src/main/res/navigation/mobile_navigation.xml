@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.CheapStays.myhbms.view.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_hotelItemDetailsFragment2"
+            app:destination="@id/hotelItemDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_cart"
+        android:name="com.CheapStays.myhbms.view.CartFragment"
+        android:label="@string/title_cart"
+        tools:layout="@layout/fragment_cart" />
+
+    <fragment
+        android:id="@+id/navigation_order"
+        android:name="com.CheapStays.myhbms.view.OrderFragment"
+        android:label="@string/title_order"
+        tools:layout="@layout/fragment_order" />
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.CheapStays.myhbms.view.AccountFragment"
+        android:label="@string/title_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/hotelItemDetailsFragment"
+        android:name="com.CheapStays.myhbms.view.HotelItemDetailsFragment"
+        android:label="fragment_hotel_item_details"
+        tools:layout="@layout/fragment_hotel_item_details" >
+        <argument
+            android:name="hotelid"
+            app:argType="string"
+            android:defaultValue='""' />
+    </fragment>
+</navigation>

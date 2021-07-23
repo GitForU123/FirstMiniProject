@@ -17,10 +17,10 @@ class HotelListAdapter(val hotelList : ArrayList<Hotel>)  : RecyclerView.Adapter
 
     class HotelHolder(view : View) : RecyclerView.ViewHolder(view){
         // this class holds all the view
-        val hotelimage = view.findViewById<ImageView>(R.id.itemIV)
-        val hotelName = view.findViewById<TextView>(R.id.itemnameT)
-        val city = view.findViewById<TextView>(R.id.itempriceT)
-        val cuisineType = view.findViewById<TextView>(R.id.cuisineT)
+        val hotelimage = view.findViewById<ImageView>(R.id.hotIV)
+        val hotelName = view.findViewById<TextView>(R.id.hotnameT)
+        val city = view.findViewById<TextView>(R.id.hotcityT)
+        val cuisineType = view.findViewById<TextView>(R.id.hotcuisineT)
 
 
 
@@ -28,13 +28,13 @@ class HotelListAdapter(val hotelList : ArrayList<Hotel>)  : RecyclerView.Adapter
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): HotelListAdapter.HotelHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.hotel_item,
+    ): HotelHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.hotel_details,
             parent,false)
         return HotelHolder(view)
     }
 
-    override fun onBindViewHolder(holder: HotelListAdapter.HotelHolder, position: Int) {
+    override fun onBindViewHolder(holder: HotelHolder, position: Int) {
 
         holder.itemView.setOnCreateContextMenuListener { menu, v, menuInfo ->
             menu?.add("Add items & Image")?.setOnMenuItemClickListener {
