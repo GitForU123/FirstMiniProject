@@ -6,6 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".view.ItemsActivity">
 
+    <ImageView
+        android:id="@+id/itemimageIV"
+        android:layout_width="54dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView5"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toTopOf="@+id/textView5"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Add Image"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/cuisinetypeEd"
+        app:layout_constraintTop_toBottomOf="@+id/cuisinetypeEd" />
+
     <Button
         android:id="@+id/itemsaveB"
         android:layout_width="wrap_content"
@@ -14,9 +34,9 @@
         android:onClick="saveClick"
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cuisinetypeEd" />
+        app:layout_constraintTop_toBottomOf="@+id/itemimageIV" />
 
     <EditText
         android:id="@+id/itempriceE"

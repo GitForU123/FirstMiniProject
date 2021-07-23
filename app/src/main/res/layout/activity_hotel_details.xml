@@ -16,18 +16,38 @@
         tools:context=".view.HotelDetailsActivity">
 
 
+        <ImageView
+            android:id="@+id/hoteliv"
+            android:layout_width="54dp"
+            android:layout_height="51dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView4"
+            app:layout_constraintStart_toEndOf="@+id/textView4"
+            app:layout_constraintTop_toTopOf="@+id/textView4"
+            app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Add Image"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/indianC"
+            app:layout_constraintTop_toBottomOf="@+id/indianC" />
+
         <Button
             android:id="@+id/saveB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:onClick="buttonClick"
             android:text="Save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/indianC" />
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <Button
             android:id="@+id/cancelB"

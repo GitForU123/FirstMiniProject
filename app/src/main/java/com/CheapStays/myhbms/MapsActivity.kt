@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.CheapStays.myhbms.databinding.ActivityMapsBinding
 import com.CheapStays.myhbms.view.Hotel
+import com.CheapStays.myhbms.view.HotelItemDetailsFragment
 import com.CheapStays.myhbms.view.UserActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -58,9 +59,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         mMap = googleMap
 
         mMap.uiSettings.isZoomControlsEnabled = true
+
         mMap.setOnMarkerClickListener {
             it.showInfoWindow()
-            Toast.makeText(this,"you are here $it",Toast.LENGTH_SHORT).show()
+                val title =it.title ?: ""
+            val snippet = it.snippet
+            Toast.makeText(this,"you are here $title",Toast.LENGTH_SHORT).show()
+            Log.d("Map","title $title & city $snippet")
+
+            //show hotel item details
+
+            val transaction = supportFragmentManager.beginTransaction()
+            val hotelItemDetailFrag = HotelItemDetailsFragment.newInstance(it.title!!)
+            transaction.replace(R.id.mapL,hotelItemDetailFrag)
+            transaction.commit()
             true
         }
 
@@ -83,7 +95,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                         val long = hotel.long
 
                         val hotelLoc = LatLng(lat, long)
-                        val op = MarkerOptions().position(hotelLoc).title("${hotel.name}")
+                        val op = MarkerOptions().position(hotelLoc).title("${hotel.id}")
                         op.snippet("${hotel.city}")
                         mMap.addMarker(op)
 
@@ -119,19 +131,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             if (location != null){
                 lastLocation = location
                 val currentLatLng = LatLng(location.latitude, location.longitude)
-                placeMarkerOnMap(currentLatLng)
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 10f))
+//                placeMarkerOnMap(currentLatLng)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 8f))
             }
         }
     }
 
-    private fun placeMarkerOnMap(currentLatLng: LatLng) {
-        val lat = currentLatLng.latitude
-        val long = currentLatLng.longitude
-        val markerOptions = MarkerOptions().position(currentLatLng)
-        markerOptions.title("Your delivery here").snippet("your $lat & $long")
-        mMap.addMarker(markerOptions)
-    }
+//    private fun placeMarkerOnMap(currentLatLng: LatLng) {
+//        val lat = currentLatLng.latitude
+//        val long = currentLatLng.longitude
+//        val markerOptions = MarkerOptions().position(currentLatLng)
+//        markerOptions.title("Your delivery here").snippet("your $lat & $long")
+//        mMap.addMarker(markerOptions)
+//    }
 
     override fun onMarkerClick(p0: Marker?) = false
 

@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
     app:cardBackgroundColor="#F3DC9A"
@@ -10,12 +10,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/itemIV"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_marginBottom="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
@@ -39,12 +39,13 @@
 
         <TextView
             android:id="@+id/itemnameT"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_width="84dp"
+            android:layout_height="28dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="40dp"
             android:layout_marginTop="15dp"
-            android:text="hotelname"
+            android:text="Item Name"
+            android:textAlignment="textStart"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/itemIV"
@@ -55,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="city"
+            android:text="price"
             android:textAlignment="viewStart"
             app:layout_constraintStart_toStartOf="@+id/itemnameT"
             app:layout_constraintTop_toBottomOf="@+id/itemnameT" />

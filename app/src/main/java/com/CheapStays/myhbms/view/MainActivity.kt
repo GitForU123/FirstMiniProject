@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
         val transaction = supportFragmentManager.beginTransaction()
         val registerfrag = RegisterFragment()
-        transaction.add(R.id.parentL,registerfrag)
+        transaction.add(R.id.mapL,registerfrag)
         transaction.commit()
     }
 }

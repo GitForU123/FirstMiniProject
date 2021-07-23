@@ -81,7 +81,7 @@ class RegisterFragment : Fragment(),ILogInView{
                     // replace fragment
                     activity?.supportFragmentManager
                         ?.beginTransaction()
-                        ?.replace(R.id.parentL, logInFrag)
+                        ?.replace(R.id.mapL, logInFrag)
                         ?.addToBackStack(null)
                         ?.commit()
 
