@@ -3,6 +3,7 @@ package com.CheapStays.myhbms.view
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,6 +29,7 @@ class HotelAdapter( val hotelList : ArrayList<HotelForUser>)  : RecyclerView.Ada
         val hotelName = view.findViewById<TextView>(R.id.hotelnameUT)
         val city = view.findViewById<TextView>(R.id.cityUT)
         val cuisineType = view.findViewById<TextView>(R.id.cuisineUT)
+        val distance = view.findViewById<TextView>(R.id.distanceT)
 
 
 
@@ -48,6 +50,21 @@ class HotelAdapter( val hotelList : ArrayList<HotelForUser>)  : RecyclerView.Ada
         val hotel = hotelList[position]
         holder.hotelName.text = hotel.name
         holder.city.text = hotel.city
+
+        val lat = hotel.lat
+        val long = hotel.long
+
+        val locpoint = Location("hotelloc")
+        locpoint.longitude = lat
+        locpoint.longitude = long
+
+        val myloc = Location("myloc")
+        myloc.latitude =25.4
+        myloc.longitude = 82.3
+
+        val kmdistance =(myloc.distanceTo(locpoint))/1000
+        holder.distance.text = kmdistance.toString()
+
 
 //        holder.itemView.setOnCreateContextMenuListener { menu, v, menuInfo ->
 //            menu?.add("Go to hotel")?.setOnMenuItemClickListener {

@@ -34,11 +34,14 @@
     <fragment
         android:id="@+id/hotelItemDetailsFragment"
         android:name="com.CheapStays.myhbms.view.HotelItemDetailsFragment"
-        android:label="fragment_hotel_item_details"
+        android:label="Hotel"
         tools:layout="@layout/fragment_hotel_item_details" >
         <argument
             android:name="hotelid"
             app:argType="string"
             android:defaultValue='""' />
+        <action
+            android:id="@+id/action_hotelItemDetailsFragment_to_navigation_cart"
+            app:destination="@id/navigation_cart" />
     </fragment>
 </navigation>

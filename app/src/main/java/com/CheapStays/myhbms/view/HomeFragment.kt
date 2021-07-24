@@ -1,6 +1,12 @@
 package com.CheapStays.myhbms.view
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.CheapStays.myhbms.MapsActivity
 import com.CheapStays.myhbms.R
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import android.location.LocationListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -21,7 +27,9 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 
-class HomeFragment : Fragment() {
+class HomeFragment() : Fragment(){
+
+
 
     lateinit var db : FirebaseDatabase
     lateinit var rView : RecyclerView
@@ -32,7 +40,10 @@ class HomeFragment : Fragment() {
         db = Firebase.database
         hotelList = arrayListOf()
 
+
+
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,13 +59,16 @@ class HomeFragment : Fragment() {
         rView = view.findViewById(R.id.userRV)
 
         rView.layoutManager = LinearLayoutManager(context)
+        getHotelList()
 
         imageButton.setOnClickListener{
             val intent = Intent(context, MapsActivity::class.java)
             startActivity(intent)
         }
 
-        getHotelList()
+
+
+
 
 
 
@@ -76,6 +90,7 @@ class HomeFragment : Fragment() {
                     }
 
                 }
+
                 rView.adapter = HotelAdapter(hotelList)
             }
 
@@ -85,6 +100,8 @@ class HomeFragment : Fragment() {
 
         })
     }
+
+
 
 }
 
