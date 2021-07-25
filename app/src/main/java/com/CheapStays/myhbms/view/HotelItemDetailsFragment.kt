@@ -131,6 +131,7 @@ class HotelItemDetailsFragment : Fragment() {
         val ref = db.getReference("HotelDB").child("Hotel").child(hotelid).child("cuisinetype")
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                itemList.clear()
                 Log.d("Cuisine", "${snapshot.value}")
                 for (list in snapshot.children){
                     Log.d("Cuisine", "$list")   // list of cuisinetype

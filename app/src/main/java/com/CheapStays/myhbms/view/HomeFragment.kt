@@ -19,6 +19,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.CheapStays.myhbms.MapsActivity
 import com.CheapStays.myhbms.R
 import android.location.LocationListener
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.tasks.CancellationToken
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -27,9 +34,10 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 
-class HomeFragment() : Fragment(){
+class HomeFragment : Fragment(){
 
-
+    private lateinit var lastLocation: Location
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     lateinit var db : FirebaseDatabase
     lateinit var rView : RecyclerView
@@ -39,6 +47,16 @@ class HomeFragment() : Fragment(){
 
         db = Firebase.database
         hotelList = arrayListOf()
+//        val request = LocationRequest.create()
+//        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+//        request.setInterval(5000)
+
+
+//        activity?.let {
+//            fusedLocationClient.getCurrentLocation().addOnSuccessListener {
+//                if(it != null)  lastLocation = it
+//            }
+//        }
 
 
 
@@ -55,27 +73,53 @@ class HomeFragment() : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
         val imageButton = view.findViewById<ImageButton>(R.id.imageButton)
         rView = view.findViewById(R.id.userRV)
 
         rView.layoutManager = LinearLayoutManager(context)
-        getHotelList()
+        getlocation()
+//        val userloc = getlocation()
+//        val lat = userloc.latitude
+//        val long = userloc.longitude
+//        Log.d("Location","lat $lat & long $long")
+//        getHotelList()
 
         imageButton.setOnClickListener{
             val intent = Intent(context, MapsActivity::class.java)
             startActivity(intent)
         }
 
-
-
-
-
-
-
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun getHotelList(){
+    private fun getlocation() {
+        if (context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) }
+            != PackageManager.PERMISSION_GRANTED) {
+            activity?.let {
+                ActivityCompat.requestPermissions(
+                    it, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                    MapsActivity.LOCATION_REQUEST_CODE
+                )
+            }
+
+        }
+        activity?.let {
+            fusedLocationClient.lastLocation.addOnSuccessListener(it) { location ->
+                if (location != null){
+                    lastLocation = location
+                    val lat = lastLocation.latitude
+                    val long = lastLocation.longitude
+                    getHotelList(lastLocation)
+                    Log.d("Location","current location $lastLocation" +
+                            "& lat $lat & long $long")
+                }
+            }
+        }
+//        return lastLocation!!
+    }
+
+    private fun getHotelList(userloc : Location){
         val ref = db.getReference("HotelDB").child("Hotel")
 
         ref.addValueEventListener(object : ValueEventListener {
@@ -91,7 +135,7 @@ class HomeFragment() : Fragment(){
 
                 }
 
-                rView.adapter = HotelAdapter(hotelList)
+                rView.adapter = HotelAdapter(hotelList,userloc)
             }
 
             override fun onCancelled(error: DatabaseError) {

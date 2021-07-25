@@ -5,7 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.CheapStays.myhbms.R
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,9 +30,17 @@ class OrderFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var db : FirebaseDatabase
+    lateinit var orderRV : RecyclerView
+    lateinit var totalpriceText : TextView
+    var totalprice : Int = 0
+    lateinit var orderList : ArrayList<Order>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        db = Firebase.database
+        orderList = arrayListOf()
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -36,6 +53,46 @@ class OrderFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_order, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        totalpriceText = view.findViewById<TextView>(R.id.totalpriceT)
+
+        orderRV = view.findViewById(R.id.orderRV)
+        orderRV.layoutManager = LinearLayoutManager(context)
+
+        getOrder()
+
+
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun getOrder() {
+        val ref = db.getReference("OrderDB").child("Order").child("currentuserid")
+
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (cartsnapshot in snapshot.children){
+                    val order = cartsnapshot.getValue(Order::class.java)
+
+                    var price = order?.itemprice?.toInt()
+                    var dbprice = (price?.times(order?.count!!))
+                    if (dbprice != null) {
+                        totalprice += dbprice
+                    }
+                    if (order != null) {
+                        orderList.add(order)
+                    }
+                }
+                orderRV.adapter = OrderAdapter(orderList)
+                totalpriceText.text = totalprice.toString()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     companion object {
@@ -57,4 +114,16 @@ class OrderFragment : Fragment() {
                 }
             }
     }
+}
+class Order(){
+    var itemname : String? = ""
+    var itemprice : String? = ""
+    var count : Int = 1
+    constructor(itemname: String?,itemprice : String?,count : Int): this(){
+        this.itemname = itemname
+        this.itemprice = itemprice
+        this.count = count
+
+    }
+
 }

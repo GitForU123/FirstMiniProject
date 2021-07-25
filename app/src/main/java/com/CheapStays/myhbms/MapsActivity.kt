@@ -1,13 +1,11 @@
 package com.CheapStays.myhbms
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 
@@ -17,10 +15,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.CheapStays.myhbms.databinding.ActivityMapsBinding
-import com.CheapStays.myhbms.view.Hotel
 import com.CheapStays.myhbms.view.HotelItemDetailsFragment
-import com.CheapStays.myhbms.view.UserActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.Marker
@@ -40,7 +35,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     companion object{
-        private const val LOCATION_REQUEST_CODE = 1
+        const val LOCATION_REQUEST_CODE = 1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

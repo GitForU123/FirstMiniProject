@@ -21,7 +21,7 @@ import com.CheapStays.myhbms.R
 import com.bumptech.glide.Glide
 import java.lang.StringBuilder
 
-class HotelAdapter( val hotelList : ArrayList<HotelForUser>)  : RecyclerView.Adapter<HotelAdapter.HotelHolder>(){
+class HotelAdapter( val hotelList : ArrayList<HotelForUser>,val userloc : Location)  : RecyclerView.Adapter<HotelAdapter.HotelHolder>(){
 
     class HotelHolder(view : View) : RecyclerView.ViewHolder(view){
         // this class holds all the view
@@ -55,14 +55,14 @@ class HotelAdapter( val hotelList : ArrayList<HotelForUser>)  : RecyclerView.Ada
         val long = hotel.long
 
         val locpoint = Location("hotelloc")
-        locpoint.longitude = lat
+        locpoint.latitude = lat
         locpoint.longitude = long
 
         val myloc = Location("myloc")
-        myloc.latitude =25.4
-        myloc.longitude = 82.3
+//        myloc.latitude =25.4
+//        myloc.longitude = 82.3
 
-        val kmdistance =(myloc.distanceTo(locpoint))/1000
+        val kmdistance =(userloc.distanceTo(locpoint))/1000
         holder.distance.text = kmdistance.toString()
 
 

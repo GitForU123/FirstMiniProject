@@ -1,6 +1,5 @@
 package com.CheapStays.myhbms.view
 
-import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,9 +17,9 @@ class ItemDetailsAdapter(val itemList : ArrayList<CuisineList>)  : RecyclerView.
 
     class ItemHolder(view: View) : RecyclerView.ViewHolder(view) {
         // this class holds all the view
-        val itemname = view.findViewById<TextView>(R.id.itemnameT)
+        val itemname = view.findViewById<TextView>(R.id.ordernameT)
         val itemtype = view.findViewById<TextView>(R.id.cuisineT)
-        val itemprice = view.findViewById<TextView>(R.id.itempriceT)
+        val itemprice = view.findViewById<TextView>(R.id.orderpriceT)
         val itemimage = view.findViewById<ImageView>(R.id.itemIV)
         val cartButton = view.findViewById<Button>(R.id.addcartB)
 
@@ -62,7 +61,8 @@ class ItemDetailsAdapter(val itemList : ArrayList<CuisineList>)  : RecyclerView.
 
             this.setOnClickListener {
                 navController = Navigation.findNavController(this)
-                navController!!.navigate(R.id.action_hotelItemDetailsFragment_to_navigation_cart,bundle)
+                    navController!!.navigate(R.id.action_hotelItemDetailsFragment_to_navigation_cart,bundle)
+
             }
         }
 

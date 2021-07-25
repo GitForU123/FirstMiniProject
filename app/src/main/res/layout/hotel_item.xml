@@ -34,11 +34,11 @@
             android:layout_marginTop="10dp"
             android:text="Cuisine type"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/itempriceT"
-            app:layout_constraintTop_toBottomOf="@+id/itempriceT" />
+            app:layout_constraintStart_toStartOf="@+id/orderpriceT"
+            app:layout_constraintTop_toBottomOf="@+id/orderpriceT" />
 
         <TextView
-            android:id="@+id/itemnameT"
+            android:id="@+id/ordernameT"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginEnd="20dp"
@@ -51,14 +51,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/itempriceT"
+            android:id="@+id/orderpriceT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="city"
             android:textAlignment="viewStart"
-            app:layout_constraintStart_toStartOf="@+id/itemnameT"
-            app:layout_constraintTop_toBottomOf="@+id/itemnameT" />
+            app:layout_constraintStart_toStartOf="@+id/ordernameT"
+            app:layout_constraintTop_toBottomOf="@+id/ordernameT" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

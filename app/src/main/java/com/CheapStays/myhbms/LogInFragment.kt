@@ -2,7 +2,6 @@ package com.CheapStays.myhbms
 
 import android.content.Intent
 import android.os.Bundle
-import android.security.keystore.UserNotAuthenticatedException
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +10,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.CheapStays.myhbms.presenter.AdminPresenter
-import com.CheapStays.myhbms.presenter.CredentialPresenter
-import com.CheapStays.myhbms.presenter.IPresenter
 import com.CheapStays.myhbms.presenter.LogInpresenter
 import com.CheapStays.myhbms.view.AdminActivity
-import com.CheapStays.myhbms.view.ILogInView
-import com.CheapStays.myhbms.view.UserActivity
 import com.CheapStays.myhbms.view.UserHomeActivity
 
 // TODO: Rename parameter arguments, choose names that match
