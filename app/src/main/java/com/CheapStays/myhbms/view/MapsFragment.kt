@@ -1,25 +1,31 @@
-package com.CheapStays.myhbms
+package com.CheapStays.myhbms.view
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.CheapStays.myhbms.HotelForMap
+import com.CheapStays.myhbms.MapsActivity
+import com.CheapStays.myhbms.R
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.CheapStays.myhbms.view.HotelItemDetailsFragment
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -27,7 +33,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     lateinit var db: FirebaseDatabase
 
@@ -41,14 +47,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps)
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-
         db = Firebase.database
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+    }
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_maps, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment?.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -58,13 +74,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         mMap.setOnMarkerClickListener {
             it.showInfoWindow()
-                val title =it.title ?: ""
+            val title =it.title ?: ""
             val snippet = it.snippet
-            Toast.makeText(this,"you are here $title",Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context,"you are here $title", Toast.LENGTH_SHORT).show()
             Log.d("Map","title $title & city $snippet")
 
             //show hotel item details
-//            findNavController(this).navigate(R.id.action_mapsactivity_to_fragment_hotel_item_details)
+
+            val bundle = Bundle()
+            bundle.putString("hotelid",title)
+            findNavController().navigate(R.id.action_mapsFragment_to_hotelItemDetailsFragment,bundle)
 //            val transaction = supportFragmentManager.beginTransaction()
 //            val hotelItemDetailFrag = HotelItemDetailsFragment.newInstance(it.title!!)
 //            transaction.replace(R.id.mapL,hotelItemDetailFrag)
@@ -84,7 +103,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 for (hotelSnapshot in snapshot.children) {
                     Log.d("AdminActivity", "$hotelSnapshot")
                     val hotel =
-                        hotelSnapshot.getValue(HotelForMap::class.java)   // value in it will be details of hotel
+                        hotelSnapshot.getValue(HotelForMapFrag::class.java)   // value in it will be details of hotel
 
                     if (hotel != null) {
                         val lat = hotel.lat
@@ -92,7 +111,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
                         val hotelLoc = LatLng(lat, long)
                         val op = MarkerOptions().position(hotelLoc).title("${hotel.id}")
-                        op.snippet("${hotel.city}")
+                        op.snippet("hotelname: ${hotel.name} " +
+                                "city: ${hotel.city}")
                         mMap.addMarker(op)
 
 
@@ -115,20 +135,29 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
 
     private fun setUpMap() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (context?.let {
+                ActivityCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            }
             != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_REQUEST_CODE)
+            activity?.let {
+                ActivityCompat.requestPermissions(
+                    it, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                    MapsActivity.LOCATION_REQUEST_CODE
+                )
+            }
 
-            return
         }
-        mMap.isMyLocationEnabled = true
-        fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
-            if (location != null){
-                lastLocation = location
-                val currentLatLng = LatLng(location.latitude, location.longitude)
+        activity?.let {
+            fusedLocationClient.lastLocation.addOnSuccessListener(it) { location ->
+                if (location != null) {
+                    lastLocation = location
+                    val currentLatLng = LatLng(location.latitude, location.longitude)
 //                placeMarkerOnMap(currentLatLng)
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 8f))
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 8f))
+                }
             }
         }
     }
@@ -148,7 +177,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
 }
 
-class HotelForMap(){
+class HotelForMapFrag(){
     var id : Int = 0
     var name : String = ""
     var city : String = ""

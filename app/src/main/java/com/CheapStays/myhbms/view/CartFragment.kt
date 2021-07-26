@@ -11,6 +11,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.CheapStays.myhbms.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -26,7 +29,11 @@ private const val ARG_PARAM2 = "price"
 
 class CartFragment : Fragment() {
     lateinit var db : FirebaseDatabase
+    lateinit var auth : FirebaseAuth
+    var currenuser : FirebaseUser? = null
+    var currentuserid : String? = ""
     lateinit var cartRV : RecyclerView
+    lateinit var orderButton : Button
     lateinit var cartList : ArrayList<Cart>
     private var itemname: String? = null
     private var price: String? = null
@@ -35,6 +42,11 @@ class CartFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         db = Firebase.database
+        auth = Firebase.auth
+
+        currenuser = auth.currentUser
+
+       currentuserid = currenuser?.uid
 
         cartList = arrayListOf()
         arguments?.let {
@@ -57,22 +69,26 @@ class CartFragment : Fragment() {
         cartRV = view.findViewById(R.id.cartRV)
         cartRV.layoutManager = LinearLayoutManager(context)
 
-        Toast.makeText(context,"itemname $itemname & price $price",Toast.LENGTH_SHORT).show()
+//        Toast.makeText(context,"itemname $itemname & price $price",Toast.LENGTH_SHORT).show()
 
+            if(itemname != null && price != null){
+                addToCart(itemname,price,count)
+            }
 
-            addToCart(itemname,price,count)
 
 
         getCart()
 
         // place order handle
-        val orderButton = view.findViewById<Button>(R.id.orderB)
+        orderButton = view.findViewById<Button>(R.id.orderB)
+
+
 
         orderButton.setOnClickListener {
             // create Orderdatabase and store the value picked
             val ref = db.getReference("OrderDB").child("Order")
 
-            ref.child("currentuserid").setValue(cartList)
+            ref.child("$currentuserid").setValue(cartList)
 
             // delete the CartDB here
             val ref2 = db.getReference("CartDB")
@@ -85,7 +101,7 @@ class CartFragment : Fragment() {
     }
 
     private fun getCart() {
-        val ref = db.getReference("CartDB").child("Cart").child("currentuserid")
+        val ref = db.getReference("CartDB").child("Cart").child("$currentuserid")
 
         ref.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -98,6 +114,11 @@ class CartFragment : Fragment() {
                     }
                 }
                 cartRV.adapter = CartAdapter(cartList)
+                if(cartList.isEmpty()){
+                    orderButton.visibility = View.INVISIBLE
+                }else{
+                    orderButton.visibility = View.VISIBLE
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -112,7 +133,7 @@ class CartFragment : Fragment() {
         val ref = db.getReference("CartDB").child("Cart")
         val cart = Cart(itemname,price,count)
 
-        ref.child("currentuserid").child("$itemname").setValue(cart)
+        ref.child("$currentuserid").child("$itemname").setValue(cart)
 
 
     }
@@ -139,7 +160,7 @@ class CartFragment : Fragment() {
 }
 class Cart(){
     var itemname : String? = ""
-    var itemprice : String? = "200"
+    var itemprice : String? = "0"
     var count : Int = 1
     constructor(itemname: String?,itemprice : String?,count : Int): this(){
        this.itemname = itemname

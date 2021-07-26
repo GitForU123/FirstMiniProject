@@ -80,7 +80,7 @@ class HotelItemDetailsFragment : Fragment() {
 
       getHotelDetails(hotelid)
 
-            Toast.makeText(context,"hotel id received $hotelid",Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context,"hotel id received $hotelid",Toast.LENGTH_SHORT).show()
 
 
         super.onViewCreated(view, savedInstanceState)

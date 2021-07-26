@@ -1,6 +1,7 @@
 package com.CheapStays.myhbms
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,9 @@ import android.widget.Toast
 import com.CheapStays.myhbms.presenter.CredentialPresenter
 import com.CheapStays.myhbms.presenter.IPresenter
 import com.CheapStays.myhbms.view.ILogInView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,12 +33,15 @@ class RegisterFragment : Fragment(),ILogInView{
     lateinit var emailEditText: EditText
     lateinit var passEditText: EditText
     lateinit var registerButton : Button
+    lateinit var auth : FirebaseAuth
 
     // presenter reference here
     lateinit var presenter: IPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        auth = Firebase.auth
         arguments?.let {
             Remail = it.getString(ARG_PARAM1)
             Rpass = it.getString(ARG_PARAM2)
@@ -77,6 +84,20 @@ class RegisterFragment : Fragment(),ILogInView{
                 1 -> {onLogInError("Put a valid mail")}
                 2 -> {onLogInError("min password length is 8")}
                 -1 ->{
+
+                    val accountResult = auth.createUserWithEmailAndPassword(Remail!!, Rpass!!)
+                    activity?.let {
+                        accountResult.addOnCompleteListener(it) {
+                            if(it.isSuccessful){
+                                Log.d("Register","Success fully registered with mail $Remail")
+
+
+                            }else{
+                                Log.d("Register","Registration failed")
+                                Toast.makeText(context,"Already a user",Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
                     val logInFrag =LogInFragment.newInstance(Remail,Rpass)
                     // replace fragment
                     activity?.supportFragmentManager
@@ -86,7 +107,7 @@ class RegisterFragment : Fragment(),ILogInView{
                         ?.commit()
 
 
-                    onLogInSuccess("LogIn Successfull")
+                    onLogInSuccess("Registration Successfull")
 
                 }
             }

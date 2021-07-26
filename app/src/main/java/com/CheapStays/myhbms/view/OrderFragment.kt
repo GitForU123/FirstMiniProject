@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.CheapStays.myhbms.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -31,6 +33,8 @@ class OrderFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     lateinit var db : FirebaseDatabase
+    lateinit var auth : FirebaseAuth
+    var currentuserid : String ? = ""
     lateinit var orderRV : RecyclerView
     lateinit var totalpriceText : TextView
     var totalprice : Int = 0
@@ -40,12 +44,15 @@ class OrderFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         db = Firebase.database
+
+        currentuserid = Firebase.auth.currentUser?.uid
         orderList = arrayListOf()
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,7 +75,7 @@ class OrderFragment : Fragment() {
     }
 
     private fun getOrder() {
-        val ref = db.getReference("OrderDB").child("Order").child("currentuserid")
+        val ref = db.getReference("OrderDB").child("Order").child("$currentuserid")
 
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -113,6 +120,7 @@ class OrderFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+
     }
 }
 class Order(){

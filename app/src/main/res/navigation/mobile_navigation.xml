@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_navigation_home_to_hotelItemDetailsFragment2"
             app:destination="@id/hotelItemDetailsFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
 
     <fragment
@@ -48,4 +51,14 @@
             android:id="@+id/action_hotelItemDetailsFragment_to_navigation_cart"
             app:destination="@id/navigation_cart" />
     </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.CheapStays.myhbms.view.MapsFragment"
+        android:label="Maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_hotelItemDetailsFragment"
+            app:destination="@id/hotelItemDetailsFragment" />
+    </fragment>
+
 </navigation>

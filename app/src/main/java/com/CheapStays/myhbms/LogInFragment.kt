@@ -13,6 +13,9 @@ import com.CheapStays.myhbms.presenter.AdminPresenter
 import com.CheapStays.myhbms.presenter.LogInpresenter
 import com.CheapStays.myhbms.view.AdminActivity
 import com.CheapStays.myhbms.view.UserHomeActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,12 +36,17 @@ class LogInFragment : Fragment() {
     lateinit var emailText: EditText
     lateinit var passText : EditText
     lateinit var logInButton : Button
+    lateinit var auth : FirebaseAuth
 
     // reference to interface presenter
     lateinit var presenter : LogInpresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // intialize authentication db
+        auth = Firebase.auth
+
         arguments?.let {
             email = it.getString(ARG_PARAM1)
             password = it.getString(ARG_PARAM2)
@@ -66,24 +74,36 @@ class LogInFragment : Fragment() {
 
         emailText.setText(email)
 
-        Toast.makeText(context,"received email: $email" +
-                "password : $password",Toast.LENGTH_SHORT).show()
+
         logInButton.setOnClickListener {
             val logemail = emailText.text.toString()
             val logpass = passText.text.toString()
+
+            activity?.let {
+                auth.signInWithEmailAndPassword(logemail,logpass).addOnCompleteListener(it){
+                    if(it.isSuccessful){
+
+                        Toast.makeText(context,"Succesfully signed in",Toast.LENGTH_SHORT).show()
+                        if(isAdmin){
+                            // launch the admin page
+                            val intent = Intent(context,AdminActivity::class.java)
+                            startActivity(intent)
+                            // close the fragment
+
+                        }else{
+                            // launch the user page
+                            val intent = Intent(context, UserHomeActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }else{
+                        Toast.makeText(context,"Authentication failed",Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
             isAdmin = presenter.checkAdmin(logemail,logpass)  // Using method of LogInPresenter
             passText.setText("")
-            if(isAdmin){
-                // launch the admin page
-                val intent = Intent(context,AdminActivity::class.java)
-                startActivity(intent)
-                // close the fragment
 
-            }else{
-                // launch the user page
-                val intent = Intent(context, UserHomeActivity::class.java)
-                startActivity(intent)
-            }
         }
 
 

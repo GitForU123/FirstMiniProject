@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.CheapStays.myhbms.R
 import com.bumptech.glide.Glide
 import java.lang.StringBuilder
+import java.text.DecimalFormat
 
 class HotelAdapter( val hotelList : ArrayList<HotelForUser>,val userloc : Location)  : RecyclerView.Adapter<HotelAdapter.HotelHolder>(){
 
@@ -54,16 +55,16 @@ class HotelAdapter( val hotelList : ArrayList<HotelForUser>,val userloc : Locati
         val lat = hotel.lat
         val long = hotel.long
 
+        // creating a location based on entered hotel latitude and longitude
         val locpoint = Location("hotelloc")
         locpoint.latitude = lat
         locpoint.longitude = long
 
-        val myloc = Location("myloc")
-//        myloc.latitude =25.4
-//        myloc.longitude = 82.3
-
+        // getting distance between to location and converting into Kilometers
         val kmdistance =(userloc.distanceTo(locpoint))/1000
-        holder.distance.text = kmdistance.toString()
+
+        val shortkm = DecimalFormat("#.##").format(kmdistance)
+        holder.distance.text = shortkm
 
 
 //        holder.itemView.setOnCreateContextMenuListener { menu, v, menuInfo ->

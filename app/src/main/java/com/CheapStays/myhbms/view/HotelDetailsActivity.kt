@@ -15,9 +15,9 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_hotel_details.*
-import kotlinx.android.synthetic.main.hotel_item.*
 
-var idCouter : Int = 3
+
+//var idCouter : Int = 3
 class HotelDetailsActivity : AppCompatActivity() {
     lateinit var uri : Uri
     var typeList = mutableListOf<String>()

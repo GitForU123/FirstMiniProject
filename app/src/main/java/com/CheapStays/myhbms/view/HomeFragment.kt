@@ -20,6 +20,7 @@ import com.CheapStays.myhbms.MapsActivity
 import com.CheapStays.myhbms.R
 import android.location.LocationListener
 import androidx.core.app.ActivityCompat
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -86,8 +87,9 @@ class HomeFragment : Fragment(){
 //        getHotelList()
 
         imageButton.setOnClickListener{
-            val intent = Intent(context, MapsActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(context, MapsActivity::class.java)
+//            startActivity(intent)
+            findNavController().navigate(R.id.action_navigation_home_to_mapsFragment)
         }
 
         super.onViewCreated(view, savedInstanceState)

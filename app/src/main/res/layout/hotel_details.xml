@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    app:cardBackgroundColor="#F3DC9A"
+    app:cardBackgroundColor="#FF5722"
     app:cardCornerRadius="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,6 +36,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginTop="5dp"
             android:text="Cuisine type"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/hotcityT"
             app:layout_constraintTop_toBottomOf="@+id/hotcityT" />
@@ -56,11 +57,12 @@
         <TextView
 
             android:id="@+id/hotcityT"
-            android:layout_width="56dp"
-            android:layout_height="28dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="city"
             android:textAlignment="viewStart"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@+id/hotnameT"
             app:layout_constraintTop_toBottomOf="@+id/hotnameT" />
 
