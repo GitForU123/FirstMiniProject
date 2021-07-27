@@ -10,9 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.CheapStays.myhbms.presenter.CredentialPresenter
-import com.CheapStays.myhbms.presenter.IPresenter
-import com.CheapStays.myhbms.view.ILogInView
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -36,8 +34,7 @@ class RegisterFragment : Fragment(){
     lateinit var registerButton : Button
     lateinit var auth : FirebaseAuth
 
-    // presenter reference here
-    lateinit var presenter: IPresenter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,7 +90,7 @@ class RegisterFragment : Fragment(){
                         accountResult.addOnCompleteListener(it) {
                             if(it.isSuccessful){
                                 Log.d("Register","Success fully registered with mail $Remail")
-                                val logInFrag =LogInFragment.newInstance(Remail,Rpass)
+                                val logInFrag =LogInFragment.newInstance(Remail)
                                 // replace fragment
                                 activity?.supportFragmentManager
                                     ?.beginTransaction()

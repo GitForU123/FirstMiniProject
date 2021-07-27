@@ -20,16 +20,11 @@ class SplashActivity : AppCompatActivity(){
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-//        Timer().schedule(3000){
-//            val intent = Intent(this@SplashActivity, MainActivity::class.java)
-//            startActivity(intent)
-//            finish()
+
 
         Handler().postDelayed({
             // Get the current user id from firestore
             var currentUserID = FirebaseAuth.getInstance().currentUser?.uid
-//            if(currentUserID == "owUHYkK4CmQqxc7zJEJO3bYRc2X2"){
-//                startActivity(Intent(this,AdminActivity::class.java))
             if(currentUserID != null){
                 if(currentUserID == "FQq0vKB4MMNxlncS62Y6GQWf1iD3"){
                     startActivity(Intent(this,AdminActivity::class.java))

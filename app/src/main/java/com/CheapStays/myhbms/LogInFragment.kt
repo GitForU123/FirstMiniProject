@@ -9,8 +9,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.CheapStays.myhbms.presenter.AdminPresenter
-import com.CheapStays.myhbms.presenter.LogInpresenter
 import com.CheapStays.myhbms.view.AdminActivity
 import com.CheapStays.myhbms.view.UserHomeActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -20,7 +18,7 @@ import com.google.firebase.ktx.Firebase
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "email"
-private const val ARG_PARAM2 = "pass"
+
 
 /**
  * A simple [Fragment] subclass.
@@ -50,7 +48,7 @@ class LogInFragment : Fragment() {
 
         arguments?.let {
             email = it.getString(ARG_PARAM1)
-            password = it.getString(ARG_PARAM2)
+
 
             // init
 
@@ -81,18 +79,24 @@ class LogInFragment : Fragment() {
             val logemail = emailText.text.toString()
             val logpass = passText.text.toString()
 
-            activity?.let {
-                auth.signInWithEmailAndPassword(logemail,logpass).addOnCompleteListener(it){
-                    if(it.isSuccessful){
+            if(logemail.isNotEmpty()){
+                activity?.let {
+                    auth.signInWithEmailAndPassword(logemail,logpass).addOnCompleteListener(it){
+                        if(it.isSuccessful){
                             userid = auth.currentUser?.uid!!
-                        checkAdmin(userid)
-                        Toast.makeText(context,"Succesfully signed in",Toast.LENGTH_SHORT).show()
+                            checkAdmin(userid)
+                            Toast.makeText(context,"Succesfully signed in",Toast.LENGTH_SHORT).show()
 
-                    }else{
-                        Toast.makeText(context,"Authentication failed",Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(context,"Authentication failed",Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
+            }else{
+                Toast.makeText(context,"pls put a valid email",Toast.LENGTH_SHORT).show()
             }
+
+
 
 
             passText.setText("")
@@ -124,11 +128,11 @@ class LogInFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(email: String?, pass: String?) =
+        fun newInstance(email: String?) =
             LogInFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, email)
-                    putString(ARG_PARAM2, pass)
+
                 }
             }
     }
