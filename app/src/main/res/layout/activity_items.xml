@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Add Items"
-        android:textColor="#874747"
+        android:textColor="@color/button_color"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

@@ -5,9 +5,10 @@
     android:id="@+id/cView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginBottom="10dp"
-    app:cardBackgroundColor="@color/white"
+    app:cardBackgroundColor="@color/button_color"
     app:cardCornerRadius="20dp">
 
 
@@ -20,11 +21,11 @@
             android:id="@+id/cartitemnameT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:text="Food Name"
-            android:textColor="#2196F3"
+            android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,19 +36,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="24dp"
             android:text="Price"
-            android:textColor="#E42012"
-            app:layout_constraintStart_toEndOf="@+id/textView10"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:text="Rs."
-            app:layout_constraintStart_toEndOf="@+id/cardView"
+            android:text="Rs : "
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@+id/cartitempriceT"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView

@@ -1,5 +1,6 @@
 package com.CheapStays.myhbms.view
 
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,11 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_hotel_details.*
 import kotlinx.android.synthetic.main.activity_items.*
+import com.CheapStays.myhbms.view.HotelDetailsActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import java.lang.Exception
 
 //var itemcounter : Int = 1
 class ItemsActivity : AppCompatActivity() {
@@ -23,6 +29,7 @@ class ItemsActivity : AppCompatActivity() {
     lateinit var db : FirebaseDatabase
     lateinit var uri : Uri
     var itemImageURL : String = ""
+    lateinit var mProgressDialog : Dialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_items)
@@ -74,6 +81,8 @@ class ItemsActivity : AppCompatActivity() {
     }
 
     private fun uploadimage(uri: Uri) {
+        // creating obj of hotel details to use progress dialog
+       showProgressDialog()
         val imageName = uri.lastPathSegment.toString()
 
         val storageReference = FirebaseStorage.getInstance().reference.child("image/$imageName.jpg")
@@ -82,6 +91,7 @@ class ItemsActivity : AppCompatActivity() {
 
         storageReference.putFile(uri).addOnSuccessListener {
             it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
+               hideProgressDialog()
                 itemImageURL = it.toString()
 
                 // here add a progress bar when complete let user interact
@@ -94,32 +104,80 @@ class ItemsActivity : AppCompatActivity() {
 
     }
 
+    private fun hideProgressDialog() {
+        mProgressDialog.dismiss()
+    }
+
+    private fun showProgressDialog() {
+        mProgressDialog = Dialog(this)
+
+
+        mProgressDialog.setContentView(R.layout.dialog_progress)
+        mProgressDialog.setCanceledOnTouchOutside(false)
+        mProgressDialog.setCancelable(false)
+
+        mProgressDialog.show()
+    }
+
     private fun addItems(hotelid: Int) {
 
-        val itemNo = itemNoE.text.toString().toInt()
+
+        val itemNo = itemNoE.text.toString()
         val itemdescription = itemdescriptionE.text.toString()
-        val itemprice = itempriceE.text.toString().toInt()
+        val itemprice = itempriceE.text.toString()
         val cuisinetype = cuisinetypeEd.text.toString()
 
+        val validData = validCheck(itemNo,itemdescription,itemprice,cuisinetype)
+        if(validData){
+            val item = Item(itemNo.toInt(),itemdescription,itemprice.toInt(),cuisinetype,itemImageURL)
 
-        val item = Item(itemNo,itemdescription,itemprice,cuisinetype,itemImageURL)
+            val ref = db.getReference("HotelDB").child("Hotel").child("$hotelid").child("cuisinetype").child(cuisinetype).child(itemNo)  //.setValue(item)
 
-        val ref = db.getReference("HotelDB").child("Hotel")
-        ref.child("$hotelid").child("cuisinetype").child(cuisinetype).child("$itemNo").setValue(item)
+            ref.addListenerForSingleValueEvent(object  : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (!snapshot.exists()){
+                     ref.setValue(item)
 
+                        val intent = Intent(this@ItemsActivity,AdminActivity::class.java)
+                        startActivity(intent)
+
+                        finish()
+                    }else{
+                        Toast.makeText(this@ItemsActivity,"item no already exist",Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
+
+        }else{
+            Toast.makeText(this, "Pls enter valid field", Toast.LENGTH_SHORT).show()
+        }
+
+
+    }
+
+    private fun validCheck(itemNo: String, itemdescription: String,
+                           itemprice: String, cuisinetype: String) : Boolean {
+
+        try {
+            itemNo.toInt()
+            itemprice.toInt()
+        }catch (exception : Exception){
+            return false
+        }
+        return  itemdescription.isNotEmpty() && cuisinetype.isNotEmpty()
     }
 
     fun saveClick(view: View) {
 
         addItems(hotelid)
 
-        val intent = Intent(this,AdminActivity::class.java)
-        startActivity(intent)
 
-        // increase counter here
-//        itemcounter++
-
-        finish()
     }
 }
 class Item (){

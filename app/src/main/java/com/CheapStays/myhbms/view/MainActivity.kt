@@ -11,8 +11,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val transaction = supportFragmentManager.beginTransaction()
-        val registerfrag = RegisterFragment()
-        transaction.add(R.id.mapL,registerfrag)
+        val Introfrag = IntroFragment()
+        transaction.add(R.id.mapL,Introfrag)
         transaction.commit()
     }
 }

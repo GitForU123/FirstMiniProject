@@ -10,6 +10,7 @@ class CredentialPresenter : IPresenter {
 
     val adminEmail : String = ""
     val password : String = ""
+    val uid : String = ""
 
     // getting reference of Fragment Class
     var fragView : ILogInView

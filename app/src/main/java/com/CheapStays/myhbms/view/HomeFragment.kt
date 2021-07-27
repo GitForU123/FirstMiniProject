@@ -1,12 +1,9 @@
 package com.CheapStays.myhbms.view
 
 import android.Manifest
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
+import android.app.Dialog
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -16,17 +13,11 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.CheapStays.myhbms.MapsActivity
 import com.CheapStays.myhbms.R
-import android.location.LocationListener
 import androidx.core.app.ActivityCompat
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.CancellationToken
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -43,24 +34,12 @@ class HomeFragment : Fragment(){
     lateinit var db : FirebaseDatabase
     lateinit var rView : RecyclerView
     lateinit  var hotelList : ArrayList<HotelForUser>
+    lateinit var mProgressDialog : Dialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        db = Firebase.database
-        hotelList = arrayListOf()
-//        val request = LocationRequest.create()
-//        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-//        request.setInterval(5000)
-
-
-//        activity?.let {
-//            fusedLocationClient.getCurrentLocation().addOnSuccessListener {
-//                if(it != null)  lastLocation = it
-//            }
-//        }
-
-
-
+        db = Firebase.database     // getting Firebase database initialize here
+        hotelList = arrayListOf()  // initializing hotelList
     }
 
 
@@ -73,52 +52,63 @@ class HomeFragment : Fragment(){
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        showProgressDialog()
+        // Start Location service to get user Location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
         val imageButton = view.findViewById<ImageButton>(R.id.imageButton)
         rView = view.findViewById(R.id.userRV)
 
         rView.layoutManager = LinearLayoutManager(context)
         getlocation()
-//        val userloc = getlocation()
-//        val lat = userloc.latitude
-//        val long = userloc.longitude
-//        Log.d("Location","lat $lat & long $long")
-//        getHotelList()
+
 
         imageButton.setOnClickListener{
-//            val intent = Intent(context, MapsActivity::class.java)
-//            startActivity(intent)
+            // Navigating to maps Fragment
             findNavController().navigate(R.id.action_navigation_home_to_mapsFragment)
         }
 
         super.onViewCreated(view, savedInstanceState)
     }
 
+    private fun showProgressDialog() {
+        mProgressDialog = context?.let { Dialog(it) }!!
+
+
+        mProgressDialog.setContentView(R.layout.dialog_progress)
+        mProgressDialog.setCanceledOnTouchOutside(false)
+        mProgressDialog.setCancelable(false)
+
+        mProgressDialog.show()
+    }
+
     private fun getlocation() {
+
+        // to check if permission is there
         if (context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) }
             != PackageManager.PERMISSION_GRANTED) {
             activity?.let {
                 ActivityCompat.requestPermissions(
                     it, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    MapsActivity.LOCATION_REQUEST_CODE
+                    MapsFragment.LOCATION_REQUEST_CODE
                 )
             }
 
         }
         activity?.let {
+            // getting last location on device saved
             fusedLocationClient.lastLocation.addOnSuccessListener(it) { location ->
                 if (location != null){
                     lastLocation = location
                     val lat = lastLocation.latitude
                     val long = lastLocation.longitude
+                    // passing the lastlocation to get distance
                     getHotelList(lastLocation)
                     Log.d("Location","current location $lastLocation" +
                             "& lat $lat & long $long")
                 }
             }
         }
-//        return lastLocation!!
+
     }
 
     private fun getHotelList(userloc : Location){
@@ -126,6 +116,7 @@ class HomeFragment : Fragment(){
 
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                hideProgressDialog()
                 hotelList.clear()
                 for (hotelSnapshot in snapshot.children) {
 
@@ -147,11 +138,14 @@ class HomeFragment : Fragment(){
         })
     }
 
+    private fun hideProgressDialog() {
+        mProgressDialog.dismiss()
+    }
 
 
 }
 
-class HotelForUser(){
+class HotelForUser {
     var id : Int = 0
     var name : String = ""
     var city : String = ""
@@ -159,15 +153,4 @@ class HotelForUser(){
     var long : Double =0.0
     var cuisine : List<String>? = null
     var url : String = ""
-    constructor( id : Int , name : String, city : String, lat : Double , long : Double,
-                 cuisine : List<String>, url : String
-    ) : this(){
-        this.id = id
-        this.name =name
-        this.city = city
-        this.lat = lat
-        this.long = long
-        this.cuisine = cuisine
-        this.url = url
-    }
 }

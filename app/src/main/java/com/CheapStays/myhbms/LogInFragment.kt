@@ -30,7 +30,7 @@ private const val ARG_PARAM2 = "pass"
 class LogInFragment : Fragment() {
     // TODO: Rename and change types of parameters
 
-    var isAdmin = false
+
     private var email: String? = null
     private var password: String? = null
     lateinit var emailText: EditText
@@ -39,7 +39,8 @@ class LogInFragment : Fragment() {
     lateinit var auth : FirebaseAuth
 
     // reference to interface presenter
-    lateinit var presenter : LogInpresenter
+
+    var userid : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +53,7 @@ class LogInFragment : Fragment() {
             password = it.getString(ARG_PARAM2)
 
             // init
-            presenter = AdminPresenter(this)
+
 
         }
     }
@@ -68,6 +69,7 @@ class LogInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         emailText = view.findViewById(R.id.emailE)
         passText = view.findViewById(R.id.passE)
         logInButton = view.findViewById(R.id.logInB)
@@ -82,31 +84,33 @@ class LogInFragment : Fragment() {
             activity?.let {
                 auth.signInWithEmailAndPassword(logemail,logpass).addOnCompleteListener(it){
                     if(it.isSuccessful){
-
+                            userid = auth.currentUser?.uid!!
+                        checkAdmin(userid)
                         Toast.makeText(context,"Succesfully signed in",Toast.LENGTH_SHORT).show()
-                        if(isAdmin){
-                            // launch the admin page
-                            val intent = Intent(context,AdminActivity::class.java)
-                            startActivity(intent)
-                            // close the fragment
 
-                        }else{
-                            // launch the user page
-                            val intent = Intent(context, UserHomeActivity::class.java)
-                            startActivity(intent)
-                        }
                     }else{
                         Toast.makeText(context,"Authentication failed",Toast.LENGTH_SHORT).show()
                     }
                 }
             }
 
-            isAdmin = presenter.checkAdmin(logemail,logpass)  // Using method of LogInPresenter
+
             passText.setText("")
 
         }
 
 
+    }
+
+    private fun checkAdmin(userid: String){
+        if(userid == "FQq0vKB4MMNxlncS62Y6GQWf1iD3"){
+            val intent = Intent(context,AdminActivity::class.java)
+            startActivity(intent)
+        }else{
+            // launch the user page
+            val intent = Intent(context, UserHomeActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     companion object {

@@ -44,8 +44,8 @@ class HotelListAdapter(val hotelList : ArrayList<Hotel>)  : RecyclerView.Adapter
                 val intent = Intent(holder.itemView.context,ItemsActivity::class.java)
                 intent.putExtra("hotelid",hotelList[position].id)
                 holder.itemView.context.startActivity(intent)
-                val activity = holder.itemView.context as Activity
-                activity.finish()
+//                val activity = holder.itemView.context as Activity
+//                activity.finish()
                 true
             }
         }
